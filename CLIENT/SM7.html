@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Small Steps: Understanding Farmers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #333; }
+    .hidden { display: none !important; }
+    .container, .dashboard, .map-content, .about-content, .contact-content, .faqs-content, .role-select-content {
+      display: flex; flex-direction: column; align-items: center; padding: 40px 20px; min-height: 100vh; width: 100vw; box-sizing: border-box; background: #fff;
+    }
+    .welcome {
+      background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?crop=entropy&cs=tinysrgb&fit=crop&h=800&w=1400') no-repeat center center/cover;
+      color: #333; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    }
+    h1 { margin-bottom: 10px; font-size: 2.5em; }
+    .welcome h1 { color: #333; font-size: 3em; }
+    .section, .dashboard-section {
+      background: #f5f5f5; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 30px 40px; margin: 20px 0; width: 90%; max-width: 600px; color: #333; text-align: left;
+    }
+    .dashboard-section h2 { color: #4CAF50; }
+    .form-container {
+      background-color: rgba(0, 0, 0, 0.05); padding: 30px; border-radius: 10px; max-width: 400px; width: 100%; margin: 30px auto 0; text-align: center;
+    }
+    .form-container input, .form-container select {
+      width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;
+    }
+    .form-container button, .main-btn, .dashboard-btn, .nav-btn, .role-btn {
+      padding: 12px 30px; background-color: #4CAF50; color: white; border: none; border-radius: 25px; font-size: 18px; cursor: pointer; margin: 10px 0; transition: 0.2s; min-width: 120px;
+    }
+    .form-container button:hover, .main-btn:hover, .dashboard-btn:hover, .nav-btn:hover, .role-btn:hover {
+      background-color: #388e3c; transform: scale(1.05);
+    }
+    .nav-bar {
+      width: 100vw; background: #333; color: #fff; display: flex; justify-content: center; gap: 20px; padding: 12px 0; position: sticky; top: 0; z-index: 10;
+    }
+    .nav-btn {
+      background: transparent; color: #fff; border: none; font-size: 1em; padding: 8px 18px; border-radius: 5px; transition: background 0.2s;
+    }
+    .nav-btn.active, .nav-btn:focus { background: #4CAF50; color: #fff; }
+    .back-button {
+      margin-top: 20px; background-color: transparent; border: 2px solid #4CAF50; color: #4CAF50; padding: 10px 20px; border-radius: 25px; font-size: 16px; cursor: pointer; transition: 0.3s;
+    }
+    .back-button:hover { background-color: #4CAF50; color: white; transform: scale(1.05); }
+    .role-select-content {
+      background: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1400&q=80') no-repeat center center/cover;
+      color: #fff; justify-content: center;
+    }
+    .role-btns { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+    .role-btn {
+      background: #fff; color: #4CAF50; border: 3px solid #4CAF50; border-radius: 15px; font-size: 1.4em; font-weight: 600;
+      padding: 35px 40px; min-width: 200px; min-height: 120px; display: flex; flex-direction: column; align-items: center; transition: all 0.25s; box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .role-btn:hover { background: #4CAF50; color: #fff; border-color: #388e3c; transform: scale(1.05);}
+    .role-btn .role-icon { font-size: 2.5em; margin-bottom: 10px; }
+    .locked-role {
+      background: #eee; color: #4CAF50; border: 2px solid #4CAF50; border-radius: 8px; font-size: 1em; font-weight: 600;
+      padding: 10px 20px; margin-bottom: 15px; margin-top: 10px; display: inline-block;
+    }
+    footer { text-align: center; margin: 20px 0; font-size: 0.9em; color: #555; }
+    iframe { width: 100%; height: 80vh; border: none; border-radius: 10px; margin-bottom: 20px; }
+    @media (max-width: 700px) {
+      .section, .dashboard-section { padding: 15px 5px; }
+      .form-container { padding: 15px 5px; }
+      .role-btns { gap: 15px; }
+      .role-btn { min-width: 120px; min-height: 80px; font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar (appears after login) -->
+  <div class="nav-bar hidden" id="navBar">
+    <button class="nav-btn" id="navDashboard" onclick="showDashboard()">Dashboard</button>
+    <button class="nav-btn" id="navMap" onclick="showMap()">Map</button>
+    <button class="nav-btn" id="navProfile" onclick="showProfile()">Profile</button>
+    <button class="nav-btn" id="navResources" onclick="showResources()">Resources</button>
+    <button class="nav-btn" id="navAbout" onclick="showAbout()">About</button>
+    <button class="nav-btn" id="navContact" onclick="showContact()">Contact</button>
+    <button class="nav-btn" id="navFAQs" onclick="showFAQs()">FAQs</button>
+    <button class="nav-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Welcome Page -->
+  <div class="welcome" id="welcomePage">
+    <h1>Small Steps: Understanding Farmers</h1>
+    <p>Helping landowners and tenants connect for a better agricultural future.</p>
+    <button class="main-btn" onclick="enterSite()">Get Started</button>
+  </div>
+
+  <!-- Main Content (Pre-login) -->
+  <div class="container hidden" id="mainContent">
+    <h1>Welcome to Small Steps</h1>
+    <div class="section">
+      <h2>How It Works</h2>
+      <p>Landowners can lease their land to tenants. Tenants can find land to start or expand their farming journey.</p>
+    </div>
+    <div class="section">
+      <h2>For Landowners</h2>
+      <p>Post your agricultural land details. Set your rent terms. Find passionate tenants to cultivate your land.</p>
+    </div>
+    <div class="section">
+      <h2>For Tenants</h2>
+      <p>Search for available agricultural land. Connect with landowners. Start your farming dream!</p>
+    </div>
+    <div class="section">
+      <h2>Contact Us</h2>
+      <p>Have questions? Reach out to us at <strong>smallsteps@farmconnect.com</strong>.</p>
+    </div>
+    <div>
+      <button class="main-btn" onclick="showRoleSelect('login')">Login</button>
+      <button class="main-btn" onclick="showRoleSelect('signup')">Sign Up</button>
+    </div>
+    <footer>
+      &copy; 2025 Small Steps: Understanding Farmers
+    </footer>
+  </div>
+
+  <!-- Role Selection Page -->
+  <div class="role-select-content hidden" id="roleSelectPage">
+    <h1 id="roleSelectTitle">Choose Your Role</h1>
+    <p style="font-size:1.2em;">Are you a Landowner or a Tenant?</p>
+    <div class="role-btns">
+      <button class="role-btn" onclick="proceedWithRole('landowner')">
+        <span class="role-icon">🌾</span>
+        Landowner
+      </button>
+      <button class="role-btn" onclick="proceedWithRole('tenant')">
+        <span class="role-icon">👩‍🌾</span>
+        Tenant
+      </button>
+    </div>
+    <button class="back-button" onclick="backToMain()">Back</button>
+  </div>
+
+  <!-- Login Page -->
+  <div class="container hidden" id="loginPage">
+    <h1>Login</h1>
+    <div class="form-container">
+      <div id="lockedLoginRole" class="locked-role"></div>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button onclick="login()">Login</button>
+      <p>Don't have an account? <a href="#" onclick="showRoleSelect('signup')" style="color: #4CAF50;">Sign up</a></p>
+    </div>
+    <button class="back-button" onclick="showRoleSelect('login')">Back</button>
+    <footer>
+      &copy; 2025 Small Steps: Understanding Farmers
+    </footer>
+  </div>
+
+  <!-- Sign Up Page -->
+  <div class="container hidden" id="signupPage">
+    <h1>Sign Up</h1>
+    <div class="form-container">
+      <div id="lockedSignupRole" class="locked-role"></div>
+      <input type="text" id="fullName" placeholder="Full Name" required>
+      <input type="email" id="signupEmail" placeholder="Email" required>
+      <input type="password" id="signupPassword" placeholder="Password" required>
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      <button onclick="signUp()">Sign Up</button>
+      <p>Already have an account? <a href="#" onclick="showRoleSelect('login')" style="color: #4CAF50;">Login</a></p>
+    </div>
+    <button class="back-button" onclick="showRoleSelect('signup')">Back</button>
+    <footer>
+      &copy; 2025 Small Steps: Understanding Farmers
+    </footer>
+  </div>
+
+  <!-- Landowner Dashboard -->
+  <div class="dashboard hidden" id="landownerDashboard">
+    <h1>Landowner Dashboard</h1>
+    <div class="dashboard-section">
+      <h2>Your Land Listings</h2>
+      <p>Post your land details and manage your listings here.</p>
+      <button class="dashboard-btn" onclick="showMap()">Pin/View Land Location</button>
+    </div>
+    <div class="dashboard-section">
+      <h2>Applications</h2>
+      <p>View tenant applications for your land.</p>
+    </div>
+  </div>
+
+  <!-- Tenant Dashboard -->
+  <div class="dashboard hidden" id="tenantDashboard">
+    <h1>Tenant Dashboard</h1>
+    <div class="dashboard-section">
+      <h2>Find Land</h2>
+      <p>Browse available land listings and connect with landowners.</p>
+    </div>
+    <div class="dashboard-section">
+      <h2>My Applications</h2>
+      <p>Track your rental applications and agreements.</p>
+    </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="map-content hidden" id="mapContent">
+    <h1>Land Map</h1>
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3558487.462276561!2d77.03784185!3d26.84670835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399959ff1f527b85%3A0x6f3894a83c0900db!2sUttar%20Pradesh!5e0!3m2!1sen!2sin!4v1682337920827!5m2!1sen!2sin" 
+      allowfullscreen 
+      loading="lazy" 
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+  <!-- Profile Section -->
+  <div class="container hidden" id="profileContent">
+    <h1>Profile</h1>
+    <div class="dashboard-section">
+      <h2>Personal Information</h2>
+      <p>Update your contact and payment information here.</p>
+    </div>
+  </div>
+
+  <!-- Resources Section -->
+  <div class="container hidden" id="resourcesContent">
+    <h1>Resources</h1>
+    <div class="dashboard-section">
+      <h2>Documents & FAQs</h2>
+      <p>Access lease templates, policies, and frequently asked questions.</p>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="about-content hidden" id="aboutContent">
+    <h1>About Small Steps</h1>
+    <div class="section">
+      <p>Small Steps is dedicated to connecting landowners and tenants for a better agricultural future. Our platform makes it easy to lease and find farmland, and provides helpful resources for both parties.</p>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="contact-content hidden" id="contactContent">
+    <h1>Contact Us</h1>
+    <div class="section">
+      <p>Email: <strong>smallsteps@farmconnect.com</strong></p>
+      <p>Phone: +91-12345-67890</p>
+      <p>Address: 123, Agri Road, Lucknow, Uttar Pradesh, India</p>
+    </div>
+  </div>
+
+  <!-- FAQs Section -->
+  <div class="faqs-content hidden" id="faqsContent">
+    <h1>Frequently Asked Questions</h1>
+    <div class="section">
+      <h3>How do I register as a landowner or tenant?</h3>
+      <p>Sign up and select your role during registration.</p>
+      <h3>Can I change my role later?</h3>
+      <p>Contact support to request a role change.</p>
+      <h3>Is my data secure?</h3>
+      <p>We use best practices to keep your data safe.</p>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Small Steps: Understanding Farmers
+  </footer>
+
+  <script>
+    let currentUser = null;
+    let currentAction = null; // 'login' or 'signup'
+    let selectedRole = null;  // 'landowner' or 'tenant'
+
+    function hideAll() {
+      [
+        'welcomePage', 'mainContent', 'loginPage', 'signupPage',
+        'landownerDashboard', 'tenantDashboard', 'mapContent',
+        'profileContent', 'resourcesContent', 'aboutContent', 'contactContent', 'faqsContent',
+        'navBar', 'roleSelectPage'
+      ].forEach(id => document.getElementById(id).classList.add('hidden'));
+    }
+    function showNav(role) {
+      document.getElementById('navBar').classList.remove('hidden');
+      document.getElementById('navMap').style.display = (role === 'landowner') ? 'inline-block' : 'none';
+    }
+    function setActiveNav(id) {
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      if (id) document.getElementById(id).classList.add('active');
+    }
+    function enterSite() {
+      hideAll();
+      document.getElementById('mainContent').classList.remove('hidden');
+      resetRoleAction();
+    }
+    function showRoleSelect(action) {
+      hideAll();
+      currentAction = action;
+      selectedRole = null;
+      document.getElementById('roleSelectTitle').textContent =
+        action === 'login' ? 'Login: Choose Your Role' : 'Sign Up: Choose Your Role';
+      document.getElementById('roleSelectPage').classList.remove('hidden');
+    }
+    function proceedWithRole(role) {
+      selectedRole = role;
+      if (currentAction === 'login') {
+        showLoginPage();
+      } else {
+        showSignUpPage();
+      }
+    }
+    function showLoginPage() {
+      hideAll();
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('lockedLoginRole').textContent =
+        selectedRole === 'landowner' ? 'Role: Landowner' : 'Role: Tenant';
+    }
+    function showSignUpPage() {
+      hideAll();
+      document.getElementById('signupPage').classList.remove('hidden');
+      document.getElementById('lockedSignupRole').textContent =
+        selectedRole === 'landowner' ? 'Role: Landowner' : 'Role: Tenant';
+    }
+    function backToMain() {
+      hideAll();
+      document.getElementById('mainContent').classList.remove('hidden');
+      resetRoleAction();
+    }
+    function resetRoleAction() {
+      currentAction = null;
+      selectedRole = null;
+    }
+
+    // Registration and Login (with backend)
+    function signUp() {
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const role = selectedRole;
+
+      if (!fullName || !email || !password || !confirmPassword || !role) {
+        alert("Please fill out all fields.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+      fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password, role })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Signup successful!');
+          showRoleSelect('login');
+        } else {
+          alert(data.error || 'Signup failed');
+        }
+      })
+      .catch(err => alert('Error: ' + err));
+    }
+
+    function login() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const role = selectedRole;
+      if (!email || !password || !role) {
+        alert("Please fill out all fields.");
+        return;
+      }
+      fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.token) {
+          currentUser = data.user;
+          hideAll();
+          showNav(role);
+          if (role === 'landowner') {
+            document.getElementById('landownerDashboard').classList.remove('hidden');
+            setActiveNav('navDashboard');
+          } else {
+            document.getElementById('tenantDashboard').classList.remove('hidden');
+            setActiveNav('navDashboard');
+          }
+        } else {
+          alert(data.error || 'Login failed');
+        }
+      })
+      .catch(err => alert('Error: ' + err));
+    }
+
+    // Dashboard and Sections (unchanged)
+    function showDashboard() {
+      hideAll();
+      showNav(currentUser.role);
+      if (currentUser.role === 'landowner') {
+        document.getElementById('landownerDashboard').classList.remove('hidden');
+      } else {
+        document.getElementById('tenantDashboard').classList.remove('hidden');
+      }
+      setActiveNav('navDashboard');
+    }
+    function showMap() {
+      if (currentUser && currentUser.role === 'landowner') {
+        hideAll();
+        showNav('landowner');
+        document.getElementById('mapContent').classList.remove('hidden');
+        setActiveNav('navMap');
+      }
+    }
+    function showProfile() {
+      hideAll();
+      showNav(currentUser.role);
+      document.getElementById('profileContent').classList.remove('hidden');
+      setActiveNav('navProfile');
+    }
+    function showResources() {
+      hideAll();
+      showNav(currentUser.role);
+      document.getElementById('resourcesContent').classList.remove('hidden');
+      setActiveNav('navResources');
+    }
+    function showAbout() {
+      hideAll();
+      showNav(currentUser.role);
+      document.getElementById('aboutContent').classList.remove('hidden');
+      setActiveNav('navAbout');
+    }
+    function showContact() {
+      hideAll();
+      showNav(currentUser.role);
+      document.getElementById('contactContent').classList.remove('hidden');
+      setActiveNav('navContact');
+    }
+    function showFAQs() {
+      hideAll();
+      showNav(currentUser.role);
+      document.getElementById('faqsContent').classList.remove('hidden');
+      setActiveNav('navFAQs');
+    }
+    function logout() {
+      currentUser = null;
+      hideAll();
+      document.getElementById('mainContent').classList.remove('hidden');
+      resetRoleAction();
+    }
+  </script>
+</body>
+</html>
