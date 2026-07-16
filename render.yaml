@@ -1,0 +1,21 @@
+# Example render.yaml manifest for deploying backend to Render.com (connect your GitHub repo to Render and deploy)
+# Replace service name, repo, and branch as needed.
+services:
+  - type: web
+    name: small-steps-backend
+    env: node
+    plan: free
+    repo: https://github.com/Maniraj0003/Small-steps-sph
+    branch: main
+    buildCommand: "cd backend && npm install"
+    startCommand: "cd backend && npm start"
+    envVars:
+      - key: JWT_SECRET
+        sync: false
+        value: "replace_with_a_strong_secret"
+      - key: DB_PATH
+        sync: false
+        value: "/data/smallsteps.db"
+    mountDirectories:
+      - source: data
+        mountPath: /data

@@ -8,11 +8,11 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const app = express();
-const PORT = 5000;
-const JWT_SECRET = 'your_super_secret_jwt_key_please_change_this_in_production!'; // <--- CHANGE THIS IN PRODUCTION
+const PORT = process.env.PORT || 5000;
+const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_jwt_key_please_change_this_in_production!'; // Set JWT_SECRET in env for production
 
 // --- Database Setup ---
-const dbPath = path.resolve(__dirname, 'smallsteps.db');
+const dbPath = process.env.DB_PATH || path.resolve(__dirname, 'smallsteps.db');
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
