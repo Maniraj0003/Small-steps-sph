@@ -36,7 +36,21 @@ const db = new sqlite3.Database(dbPath, (err) => {
 });
 
 // --- Middleware ---
-app.use(cors()); // Allow all origins for development. For production, restrict to your frontend domain.
+// Configure CORS with optional ALLOWED_ORIGINS env var (comma-separated list).
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim()) : null;
+app.use(cors({
+    origin: function(origin, callback) {
+        // Allow non-browser requests (curl, Postman) which have no origin
+        if (!origin) return callback(null, true);
+        // If no ALLOWED_ORIGINS set, allow all origins (development)
+        if (!allowedOrigins || allowedOrigins.length === 0) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
+        } else {
+            return callback(new Error('CORS policy: This origin is not allowed'));
+        }
+    }
+}));
 app.use(bodyParser.json()); // To parse JSON request bodies
 
 // --- API Endpoints ---

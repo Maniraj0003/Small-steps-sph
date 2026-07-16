@@ -38,6 +38,10 @@ Next recommended improvements
 - Deploy backend to a hosting provider (Render, Railway, Heroku, etc.) and update frontend fetch URLs to the deployed URL. See the "Deployment (Render)" section below.
 - Run `npm audit` and review vulnerabilities before forcing fixes.
 
+Postgres & serverless migration
+- The repo includes a scaffold for migrating from SQLite to Postgres: backend/db_postgres.js and backend/postgres_migration.md.
+- Example serverless function templates for signup/login are in /serverless (vercel examples). These can be copied into a Vercel project under /api.
+
 Deployment (Render - recommended for quick Node hosting)
 
 1. Connect this GitHub repository to Render (https://render.com) and create a new Web Service.
