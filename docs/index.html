@@ -259,6 +259,10 @@
   </footer>
 
   <script>
+    // API base URL used by frontend fetch() calls. You can override this from the hosting page by
+    // setting `window.API_BASE_URL = 'https://your-backend.example.com'` before this script runs.
+    const API_BASE = window.API_BASE_URL || (location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://YOUR_BACKEND_URL_HERE');
+
     let currentUser = null;
     let currentAction = null; // 'login' or 'signup'
     let selectedRole = null;  // 'landowner' or 'tenant'
@@ -338,7 +342,7 @@
         alert("Passwords do not match.");
         return;
       }
-      fetch('http://localhost:5000/api/signup', {
+      fetch(`${API_BASE}/api/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullName, email, password, role })
@@ -363,7 +367,7 @@
         alert("Please fill out all fields.");
         return;
       }
-      fetch('http://localhost:5000/api/login', {
+      fetch(`${API_BASE}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, role })
