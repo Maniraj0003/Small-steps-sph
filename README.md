@@ -18,7 +18,12 @@ Quick start (development)
    # Then open http://localhost:8080 in your browser.
 
 Notes
-- The frontend calls the backend at http://localhost:5000 by default (in the embedded fetch() calls). Update the URLs in docs/index.html if your backend is deployed elsewhere.
+- The frontend uses a configurable API base URL. By default it points to http://localhost:5000 when running locally.
+  You can set the backend URL for the hosted site by inserting a small script before the main page script in docs/index.html, for example:
+
+  <script>window.API_BASE_URL = 'https://your-backend.example.com';</script>
+
+  The frontend will use window.API_BASE_URL when present; otherwise it falls back to localhost for development.
 - For GitHub Pages: the static site is in the docs/ folder. Enable Pages in repository settings: Branch: main, Folder: /docs.
 - The backend uses a local SQLite DB at backend/smallsteps.db.
 - This repository includes minimal security defaults for development (CORS wide open, JWT secret in code). Change before production.
