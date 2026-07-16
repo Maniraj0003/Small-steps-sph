@@ -1,0 +1,10 @@
+{
+  "name": "small-steps-sph",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start-backend": "npm --prefix backend start",
+    "serve-docs": "npx http-server docs -p 8080",
+    "start": "npm run start-backend"
+  }
+}
